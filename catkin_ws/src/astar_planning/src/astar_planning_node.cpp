@@ -30,7 +30,7 @@ public:
     //路径点list
 	std::list<Point *> GetPath(Point &startPoint, Point &endPoint, bool isIgnoreCorner);
 private:
-    //寻找路径的函数，返回的是点的指针？
+    //寻找路径的函数，返回的是点的指针
 	Point *findPath(Point &startPoint, Point &endPoint, bool isIgnoreCorner);
     //获取周围点
     std::vector<Point *> getSurroundPoints(const Point *point, bool isIgnoreCorner) const;
@@ -54,24 +54,6 @@ public:
 
 void Astar::InitAstar(std::vector<std::vector<int>> &_maze){
 	maze = _maze;
-}
-
-int Astar::calcG(Point *temp_start, Point *point){
-	//如果x，y绝对值加起来是0那么就是一个点，如果是差1，那么就是差一格，如果不是1那就是斜着走的
-	int extraG = (abs(point->x - temp_start->x) + abs(point->y - temp_start->y)) == 1 ? kCost1 : kCost2; 
-	//如果是初始节点，则其父节点是空，父节点的G就为0
-	int parentG = point->parent == NULL ? 0 : point->parent->G; 
-	return parentG + extraG;
-}
-
-int Astar::calcH(Point *point, Point *end){
-	//用简单的欧几里得距离计算H，这个H的计算是关键，还有很多算法，没深入研究^_^
-	//return sqrt((double)(end->x - point->x)*(double)(end->x - point->x) + (double)(end->y - point->y)*(double)(end->y - point->y))*kCost1;
-	return (abs(end->x - point->x)+abs(end->y - point->y)) * kCost1;
-}
- 
-int Astar::calcF(Point *point){
-	return point->G + point->H;
 }
 
 Point *Astar::getLeastFpoint() //返回最小F的点
@@ -176,12 +158,6 @@ bool Astar::isCanreach(const Point *point, const Point *target, bool isIgnoreCor
 		|| (target->x == point->x&&target->y == point->y)		//与当前节点重合
 		|| isInList(closeList, target)) //如果点与当前节点重合、超出地图、是障碍物、或者在关闭列表中，返回false
 	{
-		//ROS_INFO("(%d,%d),%d", target->x,target->y,maze[target->x][target->y]);
-		// if(maze[target->x][target->y] == 100)
-		// {
-		// 	ROS_INFO("碰见障碍物了");
-		// }
-		//ROS_INFO("到不了");
 		return false;
 	}
 	else
@@ -222,6 +198,24 @@ std::vector<Point *> Astar::getSurroundPoints(const Point *point, bool isIgnoreC
 		}
 	}
 	return surroundPoints;
+}
+
+int Astar::calcG(Point *temp_start, Point *point){
+	//如果x，y绝对值加起来是0那么就是一个点，如果是差1，那么就是差一格，如果不是1那就是斜着走的
+	int extraG = (abs(point->x - temp_start->x) + abs(point->y - temp_start->y)) == 1 ? kCost1 : kCost2; 
+	//如果是初始节点，则其父节点是空，父节点的G就为0
+	int parentG = point->parent == NULL ? 0 : point->parent->G; 
+	return parentG + extraG;
+}
+
+int Astar::calcH(Point *point, Point *end){
+	//用简单的欧几里得距离计算H，这个H的计算是关键，还有很多算法，没深入研究^_^
+	//return sqrt((double)(end->x - point->x)*(double)(end->x - point->x) + (double)(end->y - point->y)*(double)(end->y - point->y))*kCost1;
+	return (abs(end->x - point->x)+abs(end->y - point->y)) * kCost1;
+}
+ 
+int Astar::calcF(Point *point){
+	return point->G + point->H;
 }
 ///////////////////////////////////////////////////////////////////////////
 float init_pose_point[3]={0};
@@ -294,7 +288,7 @@ int main(int argc, char *argv[])
 	nav_msgs::Path pathforpub;
 	pathforpub.header.frame_id = "map";
 	pathforpub.header.stamp = ros::Time::now();
-	//path.poses;
+
 	ros::Rate r(1);
     while (ros::ok())
     {
@@ -302,10 +296,6 @@ int main(int argc, char *argv[])
 		{
 			astar.maze_flag = false;
 			astar.InitAstar(mapclass.map_data);
-			// Point start(50,50);
-			// Point end(250,250);
-			// list<Point *> path = astar.GetPath(start, end, false); //这个其实是反过来的
-			// for (auto p: path)  ROS_INFO("(%d,%d)",p->x,p->y);
 		}
 		if(init_pose_point[0]&&goal_pose_point[0]){
 			
@@ -325,8 +315,6 @@ int main(int argc, char *argv[])
 			list<Point *> path = astar.GetPath(start, end, false); //这个其实是反过来的
 			pathforpub.poses.clear();
 			for (auto p: path)  {
-				//ROS_INFO("(%f,%f)",this_pose_stamped.pose.position.x,this_pose_stamped.pose.position.y);
-					//ROS_INFO("(%d,%d):%d",p->x,p->y,mapclass.map_data[p->x][p->y]);
 					geometry_msgs::PoseStamped this_pose_stamped;
 					this_pose_stamped.header.frame_id="map";
 					this_pose_stamped.header.stamp = ros::Time::now();
@@ -341,55 +329,11 @@ int main(int argc, char *argv[])
 					path_pub.publish(pathforpub);
 				}
 				//path_pub.publish(pathforpub);
-
 		}
-		// if(IsGetPath){
-			
-		// 	path_pub.publish(pathforpub);
-		// 	// if ((path_copy.size())!=0){
-		// 	// 	for (auto p: path_copy){
-		// 	// 	geometry_msgs::PoseStamped this_pose_stamped;
-		// 	// 	this_pose_stamped.header.frame_id="map";
-		// 	// 	this_pose_stamped.header.stamp = ros::Time::now();
-		// 	// 	this_pose_stamped.pose.position.x = p->x*mapclass.resolution;
-		// 	// 	this_pose_stamped.pose.position.y = p->y*mapclass.resolution;
-
-		// 	// 	this_pose_stamped.pose.orientation.x = 0;
-		// 	// 	this_pose_stamped.pose.orientation.y = 0;
-		// 	// 	this_pose_stamped.pose.orientation.z = 0;
-		// 	// 	this_pose_stamped.pose.orientation.w = 0;
-		// 	// 	pathforpub.poses.push_back(this_pose_stamped);
-		// 	// 	path_pub.publish(pathforpub);
-		// 	// }
-		// 	// }
-
-		// }
 		path_pub.publish(pathforpub);
         ros::spinOnce();
 		r.sleep();
     }
     return 0;
-	//初始化地图，用二维矩阵代表地图，1表示障碍物，0表示可通
-	// vector<vector<int>> maze = {
-	// 	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-	// 	{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	// 	{ 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1 },
-	// 	{ 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1 },
-	// 	{ 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1 },
-	// 	{ 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1 },
-	// 	{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	// 	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
-	// };
-	// Astar astar;
-	// astar.InitAstar(maze);
- 
-	// //设置起始和结束点
-	// Point start(1, 2);
-	// Point end(3, 2);
-	// //A*算法找寻路径
-	// list<Point *> path = astar.GetPath(start, end, false);
-	// for (auto &p : path)
-	// 	ROS_INFO("(%d,%d)",p->x,p->y);
-	// return 0;
 }
 
