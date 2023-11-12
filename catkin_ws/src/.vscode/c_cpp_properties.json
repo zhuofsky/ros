@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/david/catkin_ws/src/astar_planning/include/**",
+        "/home/david/catkin_ws/src/imu_pkg/include/**",
+        "/home/david/catkin_ws/src/lidar_pkg/include/**",
+        "/home/david/catkin_ws/src/map_pkg/include/**",
+        "/home/david/catkin_ws/src/slam_pkg/include/**",
+        "/home/david/catkin_ws/src/vel_pkg/include/**",
+        "/home/david/catkin_ws/src/wpr_simulation/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

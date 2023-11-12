@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: astar_planning
+Description: Description of astar_planning
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

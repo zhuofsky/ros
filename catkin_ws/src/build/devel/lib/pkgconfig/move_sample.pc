@@ -1,0 +1,8 @@
+prefix=/home/david/catkin_ws/src/build/devel
+
+Name: move_sample
+Description: Description of move_sample
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
