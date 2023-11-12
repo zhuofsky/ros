@@ -5,3 +5,17 @@ git commit -a  ##自动更新变化的文件，a可以理解为auto
 git remote add xxx git@github.com:xxx/xxx.git  #增加一个远程服务器的别名。
 git remote rm xxx   ##删除远程版本库的别名
 git push -u remotename master #将本地文件提交到Github的remoname版本库中。此时才更新了本地变更到github服务上
+git checkout master  #切换到新主干
+git merge new-txt  ##把分支合并到主干
+git branch #显示当前分支是master
+git push test_readme master #此时主干中也合并了new-txt的代码，test_readme为别名
+git remote update 别名 --prune
+
+#查看所有分支
+git branch -a
+
+#删除远程分支
+git push 别名 --delete 分支名
+
+#删除本地分支
+git branch -d 分支名
