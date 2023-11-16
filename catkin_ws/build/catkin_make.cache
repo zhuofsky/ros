@@ -1,0 +1,2 @@
+astar_planning:imu_pkg:lidar_pkg:map_pkg:showpath:slam_pkg:vel_pkg:wpr_simulation
+-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCATKIN_DEVEL_PREFIX=/home/david/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/david/catkin_ws/install -G Unix Makefiles
