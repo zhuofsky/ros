@@ -1,8 +1,0 @@
-prefix=/home/david/catkin_ws/src/build/devel
-
-Name: Astar_planning
-Description: Description of Astar_planning
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

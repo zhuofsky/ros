@@ -1,6 +1,0 @@
-<launch>
-  <master auto="start"/>
-  <arg name="map" value="icra2022"/>
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find a_star)/map/$(arg map).yaml" respawn="false" />
-
-</launch>

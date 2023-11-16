@@ -1,5 +1,0 @@
-<launch>
-    <node name="map_server" pkg="map_server" type="map_server" args="$(find astar_planning)/a_star_map/map/map.yaml"/>
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find astar_planning)/rviz/astar_planning.rviz"/>
-    <node pkg="astar_planning" type="astar_planning_node" name="astar_planning_node"/>
-</launch>
